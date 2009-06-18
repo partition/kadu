@@ -384,7 +384,7 @@ bool PKCS1Certificate::extractPrivateKey(const QCA::SecureArray &certificate, QC
 	//read the public exponent
 	QCA::SecureArray eData(length);
 	for(uint64_t i = 0; i < length; i++)
-		eData[i] = readNextOctet();
+		eData[i] = ((uint64_t)readNextOctet()) << ((i-1)*8);
 	e.fromArray(eData);
 
 	octet = readNextOctet();
