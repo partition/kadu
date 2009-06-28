@@ -160,7 +160,7 @@ EncryptionManager::EncryptionManager(bool firstLoad)
 							   QDir::toNativeSeparators(profilePath("keys/")));
 	if(EncryptionObject == 0)
 	{
-		MessageDialog::msg(factory->errorInfo(), false, "32x32/dialog-warning", configurationWindow);
+		MessageDialog::msg(factory->errorInfo(), false, "32x32/dialog-warning", kadu);
 	}
 
 	// use mkdir from sys/stat.h - there's no easy way to set permissions through Qt
