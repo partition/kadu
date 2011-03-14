@@ -30,6 +30,7 @@
 #include "contacts/contact.h"
 #include "status/status.h"
 #include "status/status-type.h"
+#include "modeltest.h"
 
 #include "buddies-model.h"
 
@@ -38,6 +39,7 @@
 BuddiesModelProxy::BuddiesModelProxy(QObject *parent)
 	: QSortFilterProxyModel(parent), SourceBuddyModel(0), SortByStatus(true)
 {
+	new ModelTest(this, this);
 	setDynamicSortFilter(true);
 
 	BrokenStringCompare = (QString("a").localeAwareCompare(QString("B")) > 0);

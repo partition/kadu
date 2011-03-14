@@ -409,6 +409,7 @@ int main(int argc, char *argv[])
 	QDir().mkdir(path_);
 #endif
 
+	ModulesManager::instance()->loadProtocolModules();
 	ModulesManager::instance()->loadAllModules();
 
 #ifndef Q_WS_WIN

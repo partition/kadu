@@ -9,6 +9,7 @@ set (kadu_SRCS
 	modules.cpp
 	themes.cpp
 	updates.cpp
+	modeltest.cpp
 )
 
 if (UNIX AND NOT APPLE)
@@ -32,6 +33,7 @@ set (kadu_MOC_SRCS
 	modules.h
 	themes.h
 	updates.h
+	modeltest.h
 )
 
 set (kadu_SUBDIRS
