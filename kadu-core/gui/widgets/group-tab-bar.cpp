@@ -58,7 +58,7 @@ static bool compareGroups(Group g1, Group g2)
 }
 
 GroupTabBar::GroupTabBar(QWidget *parent) :
-		QTabBar(parent), ShowAllGroup(true), AutoGroupTabPosition(-1)
+		QTabBar(parent), OldIndex(-1), ShowAllGroup(true), AutoGroupTabPosition(-1)
 {
 	Filter = new GroupBuddyFilter(this);
 
@@ -95,12 +95,14 @@ GroupTabBar::GroupTabBar(QWidget *parent) :
 		AutoGroupTabPosition = config_file.readNumEntry("Look", "AllGroupTabPosition", 0);
 	else if (hasAnyUngrouppedBuddy())
 		AutoGroupTabPosition = config_file.readNumEntry("Look", "UngroupedGroupTabPosition", -1);
+
 	updateAutoGroupTab(ShowAllGroup);
 
 	if (!config_file.readBoolEntry("Look", "DisplayGroupTabs", true))
 	{
 		Filter->setAllGroupShown(true);
-		setCurrentIndex(AutoGroupTabPosition);
+		if (currentIndex() != AutoGroupTabPosition)
+			setCurrentIndex(AutoGroupTabPosition);
 		setVisible(false);
 		return;
 	}
@@ -108,8 +110,8 @@ GroupTabBar::GroupTabBar(QWidget *parent) :
 	Filter->setAllGroupShown(ShowAllGroup);
 
 	int currentGroup = config_file.readNumEntry("Look", "CurrentGroupTab", 0);
-	setCurrentIndex(currentGroup);
-	currentChangedSlot(currentGroup);
+	if (currentGroup != currentIndex())
+		setCurrentIndex(currentGroup);
 
 	connect(BuddyManager::instance(), SIGNAL(buddyUpdated(Buddy&)), this, SLOT(updateAutoGroupTab()));
 }
@@ -164,10 +166,8 @@ void GroupTabBar::updateAutoGroupTab(bool oldShowAllGroup)
 	{
 		setTabData(AutoGroupTabPosition, "AutoTab");
 		if (currentWasAutoGroup)
-		{
-			setCurrentIndex(AutoGroupTabPosition);
-			currentChangedSlot(AutoGroupTabPosition);
-		}
+			if (currentIndex() != AutoGroupTabPosition)
+				setCurrentIndex(AutoGroupTabPosition);
 	}
 }
 
@@ -182,8 +182,11 @@ void GroupTabBar::addGroup(const Group &group)
 
 void GroupTabBar::currentChangedSlot(int index)
 {
+	if (OldIndex == index)
+		return;
+	OldIndex = index;
+
 	Group group = GroupManager::instance()->byUuid(tabData(index).toString());
-	emit currentGroupChanged(group);
 	Filter->setGroup(group);
 }
 

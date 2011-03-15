@@ -34,6 +34,8 @@ class KADUAPI GroupTabBar : public QTabBar, ConfigurationAwareObject
 {
 	Q_OBJECT
 
+	int OldIndex;
+
 	GroupBuddyFilter *Filter;
 	// for dnd support
 	Group currentGroup;
@@ -82,9 +84,6 @@ public:
 	void addGroup(const Group &group);
 
 	GroupBuddyFilter * filter() { return Filter; }
-
-signals:
-	void currentGroupChanged(const Group &group);
 
 };
 
